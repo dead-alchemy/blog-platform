@@ -1,6 +1,6 @@
-import {NextResponse} from "next/server";
+import { NextResponse } from "next/server";
 
-import {query} from "@/lib/pg";
+import { query } from "@/lib/pg";
 
 export async function GET() {
 	//return NextResponse.json("hello");

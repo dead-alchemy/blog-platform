@@ -2,7 +2,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import { Input } from "app/components";
-import { signupSchema } from "../schema";
+import { signupSchema } from "@/lib/schemas";
 
 const SignUpForm = () => {
 	// Pass the useFormik() hook initial form values and a submit function that will
@@ -61,6 +61,13 @@ const SignUpForm = () => {
 		validateOnChange: false,
 		onSubmit: (values) => {
 			alert(JSON.stringify(values, null, 2));
+			fetch("/api/user/create", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			});
 		},
 	});
 	return (
