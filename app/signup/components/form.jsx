@@ -1,7 +1,8 @@
 "use client";
 import React from "react";
-import {useFormik} from "formik";
-import {Input} from "app/components/global";
+import { useFormik } from "formik";
+import { Input } from "app/components";
+import { signupSchema } from "../schema";
 
 const SignUpForm = () => {
 	// Pass the useFormik() hook initial form values and a submit function that will
@@ -49,18 +50,23 @@ const SignUpForm = () => {
 
 	const initialValues = {};
 
-	inputs.forEach(({name, initValue}) => {
+	inputs.forEach(({ name, initValue }) => {
 		initialValues[name] = initValue;
 	});
 
 	const formik = useFormik({
 		initialValues,
+		validationSchema: signupSchema,
+		validateOnBlur: false,
+		validateOnChange: false,
 		onSubmit: (values) => {
 			alert(JSON.stringify(values, null, 2));
 		},
 	});
 	return (
 		<form onSubmit={formik.handleSubmit}>
+			{JSON.stringify(formik.errors, null, 2)}
+			{JSON.stringify(formik.values, null, 2)}
 			{inputs.map((input) => (
 				<Input
 					key={input.name}
@@ -68,6 +74,7 @@ const SignUpForm = () => {
 					value={formik.values[input.name]}
 					label={input.label}
 					name={input.name}
+					error={formik.errors[input.name]}
 					{...input}
 				/>
 			))}
