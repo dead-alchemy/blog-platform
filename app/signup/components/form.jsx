@@ -59,15 +59,24 @@ const SignUpForm = () => {
 		validationSchema: signupSchema,
 		validateOnBlur: false,
 		validateOnChange: false,
-		onSubmit: (values) => {
+		onSubmit: async (values) => {
 			alert(JSON.stringify(values, null, 2));
-			fetch("/api/user/create", {
+			const res = await fetch("/api/user/create", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(values),
 			});
+
+			if (res.status === 400) {
+				formik.setErrors({ email: "Email already used." });
+				return;
+			}
+
+			if (res.status === 200) {
+				alert("user created");
+			}
 		},
 	});
 	return (
