@@ -55,7 +55,7 @@ export async function POST(req) {
 	// password;
 	// birth_date;
 
-	const email_check = await querySingle(
+	const { email_check } = await querySingle(
 		`
 	select case count(*) 
 		when 0 then true
@@ -67,17 +67,46 @@ export async function POST(req) {
 		[body.email]
 	);
 
+	console.log(email_check);
+
 	if (email_check === false) {
-		NextResponse.json({ message: "Email already in use" }, { status: 401 });
+		return NextResponse.json(
+			{ message: "Email already in use" },
+			{ status: 401 }
+		);
 	}
 
-	const result = await query("select $1, $2, $3, $4, $5", [
-		body.email,
-		body.first_name,
-		body.last_name,
-		body.password,
-		body.birth_date,
-	]);
+	const result = await querySingle(
+		`
+		WITH myconstants (salt) as (
+		values (gen_salt('bf', 8))
+		)
+
+		insert into users
+			(	email_address
+			,	first_name
+			,	last_name
+			,	password_hash
+			,	stored_salt
+			,	birthdate
+			)
+		select	$1
+			,	$2
+			,	$3
+			,	crypt($4, salt)
+			,	salt
+			,	$5
+		from myconstants
+		returning user_id
+		`,
+		[
+			body.email,
+			body.first_name,
+			body.last_name,
+			body.password,
+			body.birth_date,
+		]
+	);
 
 	return NextResponse.json(result);
 }
