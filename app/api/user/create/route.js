@@ -2,6 +2,7 @@ import { signupSchema } from "@/lib/schemas";
 import { querySingle } from "@/lib/pg";
 import { validateURL } from "@/lib/functions";
 import { NextResponse } from "next/server";
+import { makeToken } from "@/lib/functions/jwt";
 
 // signing up a single user.
 export async function POST(req) {
@@ -11,7 +12,7 @@ export async function POST(req) {
 	// if the requestor is not from a valid url return not authorized.
 	if (!validateURL(requestURL)) {
 		return NextResponse.json(
-			{ message: "Not Authorized" },
+			{ error: "Not Authorized" },
 			{
 				status: 401,
 			}
@@ -25,7 +26,7 @@ export async function POST(req) {
 	// if from signup proceced. If not send back 401
 	if (parsedUrl.pathname.toLowerCase() !== "/signup") {
 		return NextResponse.json(
-			{ message: "Not Authorized" },
+			{ error: "Not Authorized" },
 			{
 				status: 401,
 			}
@@ -51,7 +52,7 @@ export async function POST(req) {
 	// if validation failed, send back the error.
 	if (validation !== null) {
 		return NextResponse.json(
-			{ message: JSON.stringify(err) },
+			{ error: JSON.stringify(err) },
 			{
 				status: 400,
 			}
@@ -74,7 +75,7 @@ export async function POST(req) {
 	// if the email is in use let the client know.
 	if (!email_check) {
 		return NextResponse.json(
-			{ message: "Email already in use" },
+			{ error: "Email already in use" },
 			{ status: 400 }
 		);
 	}
@@ -113,5 +114,10 @@ export async function POST(req) {
 		]
 	);
 
-	return NextResponse.json(result);
+	const jwt = makeToken({
+		user: result.user_id,
+	});
+
+	console.log(jwt);
+	return NextResponse.json(jwt);
 }

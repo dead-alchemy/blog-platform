@@ -3,6 +3,7 @@ import React from "react";
 import { useFormik } from "formik";
 import { Input } from "app/components";
 import { signupSchema } from "@/lib/schemas";
+import { Jwt } from "jsonwebtoken";
 
 const SignUpForm = () => {
 	// Pass the useFormik() hook initial form values and a submit function that will
@@ -60,23 +61,24 @@ const SignUpForm = () => {
 		validateOnBlur: false,
 		validateOnChange: false,
 		onSubmit: async (values) => {
-			alert(JSON.stringify(values, null, 2));
-			const res = await fetch("/api/user/create", {
+			fetch("/api/user/create", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify(values),
-			});
-
-			if (res.status === 400) {
-				formik.setErrors({ email: "Email already used." });
-				return;
-			}
-
-			if (res.status === 200) {
-				alert("user created");
-			}
+			})
+				.then(async (res) => {
+					const data = JSON.parse(await res.text());
+					if (res.status === 400) {
+						formik.setErrors({ email: data.message });
+						return;
+					}
+					localStorage.setItem("user", JSON.stringify(data));
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		},
 	});
 	return (
