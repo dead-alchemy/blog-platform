@@ -71,7 +71,7 @@ const SignUpForm = () => {
 				.then(async (res) => {
 					const data = JSON.parse(await res.text());
 					if (res.status === 400) {
-						formik.setErrors({ email: data.message });
+						formik.setErrors({ email: data.error });
 						return;
 					}
 					localStorage.setItem("user", JSON.stringify(data));
@@ -83,8 +83,6 @@ const SignUpForm = () => {
 	});
 	return (
 		<form onSubmit={formik.handleSubmit}>
-			{JSON.stringify(formik.errors, null, 2)}
-			{JSON.stringify(formik.values, null, 2)}
 			{inputs.map((input) => (
 				<Input
 					key={input.name}

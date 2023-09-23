@@ -118,6 +118,5 @@ export async function POST(req) {
 		user: result.user_id,
 	});
 
-	console.log(jwt);
 	return NextResponse.json(jwt);
 }
