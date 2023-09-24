@@ -3,9 +3,10 @@ import React from "react";
 import { useFormik } from "formik";
 import { Input } from "app/components";
 import { signupSchema } from "@/lib/schemas";
-import { Jwt } from "jsonwebtoken";
+import { useRouter } from "next/navigation";
 
 const SignUpForm = () => {
+	const router = useRouter();
 	// Pass the useFormik() hook initial form values and a submit function that will
 	// be called when the form is submitted
 	const inputs = [
@@ -61,7 +62,7 @@ const SignUpForm = () => {
 		validateOnBlur: false,
 		validateOnChange: false,
 		onSubmit: async (values) => {
-			fetch("/api/user/create", {
+			await fetch("/api/user/create", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -75,6 +76,7 @@ const SignUpForm = () => {
 						return;
 					}
 					localStorage.setItem("user", JSON.stringify(data));
+					router.push("/blogs");
 				})
 				.catch((error) => {
 					console.log(error);
