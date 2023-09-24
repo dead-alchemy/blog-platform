@@ -12,9 +12,16 @@ const Form = () => {
 		},
 	});
 
+	console.log(formik.values);
+
 	return (
 		<div styles={"width: 100vw"}>
-			<Editor markdown={formik.values.markdown} />
+			<Editor
+				markdown={formik.values.markdown}
+				handleChange={(value) => {
+					formik.setFieldValue("markdown", value);
+				}}
+			/>
 		</div>
 	);
 };
