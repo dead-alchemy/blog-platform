@@ -3,6 +3,7 @@
 import { useFormik } from "formik";
 import { Input } from "@/app/components";
 import dynamic from "next/dynamic";
+import { newBlogSchema } from "@/lib/schemas";
 
 const Editor = dynamic(() => import("./Editor"), { ssr: false });
 
@@ -11,6 +12,10 @@ const Form = () => {
 		initialValues: {
 			title: "",
 			markdown: "# Hello",
+		},
+		validationSchema: newBlogSchema,
+		onSubmit: (values) => {
+			console.log(values);
 		},
 	});
 
