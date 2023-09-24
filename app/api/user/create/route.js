@@ -59,19 +59,14 @@ export async function POST(req) {
 		);
 	}
 
+	const email_values = [body.email, undefined];
 	// check to see if an email is already used.
 	const { email_check } = await querySingle(
-		`
-	select case count(*) 
-		when 0 then true
-		else false
-		end as email_check
-	from  blogplatform.public.users
-	where email_address = $1
-	`,
-		[body.email]
+		"call check_email_proc($1, $2)",
+		email_values
 	);
 
+	console.log(email_values, email_check);
 	// if the email is in use let the client know.
 	if (!email_check) {
 		return NextResponse.json(
@@ -82,40 +77,21 @@ export async function POST(req) {
 
 	// all checks have passed.
 	// create new user and send back new JWT.
-	const result = await querySingle(
-		`
-		WITH myconstants (salt) as (
-		values (gen_salt('bf', 8))
-		)
 
-		insert into users
-			(	email_address
-			,	first_name
-			,	last_name
-			,	password_hash
-			,	stored_salt
-			,	birthdate
-			)
-		select	$1
-			,	$2
-			,	$3
-			,	crypt($4, salt)
-			,	salt
-			,	$5
-		from myconstants
-		returning user_id
-		`,
-		[
-			body.email,
-			body.first_name,
-			body.last_name,
-			body.password,
-			body.birth_date,
-		]
-	);
+	const values = [
+		body.email,
+		body.first_name,
+		body.last_name,
+		body.password,
+		body.birth_date,
+		undefined,
+		undefined,
+	];
+	await querySingle("CALL create_user($1, $2, $3, $4, $5, $6, $7)", values);
 
 	const jwt = makeToken({
-		user: result.user_id,
+		user_id: values[5],
+		authentication_id: values[6],
 	});
 
 	return NextResponse.json(jwt);
