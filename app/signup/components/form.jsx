@@ -4,6 +4,7 @@ import { useFormik } from "formik";
 import { Input } from "app/components";
 import { signupSchema } from "@/lib/schemas";
 import { useRouter } from "next/navigation";
+import jsCookie from "js-cookie";
 
 const SignUpForm = () => {
 	const router = useRouter();
@@ -75,7 +76,7 @@ const SignUpForm = () => {
 						formik.setErrors({ email: data.error });
 						return;
 					}
-					localStorage.setItem("user", JSON.stringify(data));
+					jsCookie.set("token", JSON.stringify(data));
 					router.push("/blogs");
 				})
 				.catch((error) => {

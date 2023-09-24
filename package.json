@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mdxeditor/editor": "^1.0.0",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "formik": "^2.4.5",
+    "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "next": "13.4.19",
     "pg": "^8.11.3",
