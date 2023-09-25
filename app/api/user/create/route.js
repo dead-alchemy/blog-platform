@@ -66,7 +66,6 @@ export async function POST(req) {
 		email_values
 	);
 
-	console.log(email_values, email_check);
 	// if the email is in use let the client know.
 	if (!email_check) {
 		return NextResponse.json(
