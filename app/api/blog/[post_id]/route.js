@@ -1,5 +1,5 @@
 import { querySingle } from "@/lib/pg";
-import { checkAuth, validateURL } from "@/lib/functions";
+import { checkAuth } from "@/lib/functions";
 import { NextResponse } from "next/server";
 import { readToken } from "@/lib/functions/jwt";
 
@@ -7,32 +7,6 @@ import { readToken } from "@/lib/functions/jwt";
 export async function GET(req, { params }) {
 	// get the body of our request.
 	const { post_id } = params;
-
-	const return_not_authorized = (bool) => {
-		// if the requestor is not from a valid url return not authorized.
-		if (bool) {
-			return NextResponse.json(
-				{ error: "Not Authorized" },
-				{
-					status: 401,
-				}
-			);
-		}
-	};
-
-	// if the requestor is not from a valid url return not authorized.
-
-	return_not_authorized(!req.cookies.get("token")?.value);
-
-	// getting our current user id and auth_id from our token.
-	const token = readToken(req.cookies.get("token")?.value);
-
-	// now check if the current auth token is the most recently issued one.
-
-	const { authenticated } = await checkAuth(token);
-
-	return_not_authorized(!authenticated);
-
 	const result = await querySingle(
 		`
 		select	post_title
@@ -52,6 +26,6 @@ export async function GET(req, { params }) {
 		[post_id]
 	);
 
-	console.log(result.title);
+	//console.log(result.post_title);
 	return NextResponse.json(result);
 }
