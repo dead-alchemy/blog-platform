@@ -13,9 +13,24 @@ const Form = () => {
 			title: "",
 			markdown: "# Hello",
 		},
+		validateOnBlur: false,
+		validateOnChange: false,
 		validationSchema: newBlogSchema,
-		onSubmit: (values) => {
-			console.log(values);
+		onSubmit: async (values) => {
+			await fetch("/api/blog/create", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(values),
+			})
+				.then(async (res) => {
+					const data = JSON.parse(await res.text());
+					alert(data);
+				})
+				.catch((error) => {
+					console.log(error);
+				});
 		},
 	});
 
@@ -24,14 +39,19 @@ const Form = () => {
 			<Input
 				name="title"
 				label={"Blog Title"}
+				error={formik.errors.title}
 				handleChange={formik.handleChange}
 			/>
+			{formik.errors.markdown && <div>{formik.errors.markdown}</div>}
 			<Editor
 				markdown={formik.values.markdown}
 				handleChange={(value) => {
 					formik.setFieldValue("markdown", value);
 				}}
 			/>
+			<button type="submit" onClick={formik.handleSubmit}>
+				Create
+			</button>
 		</div>
 	);
 };
