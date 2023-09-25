@@ -32,14 +32,13 @@ export async function POST(req) {
 	}
 
 	const values = [body.email, body.password, undefined, undefined];
-	await querySingle(
+	const result = await querySingle(
 		"CALL validate_and_insert_authentication($1, $2, $3, $4)",
 		values
 	);
-
 	const jwt = makeToken({
-		user_id: values[3],
-		authentication_id: values[4],
+		user_id: result.p_user_id,
+		authentication_id: result.p_authentication_id,
 	});
 
 	return NextResponse.json(jwt);
