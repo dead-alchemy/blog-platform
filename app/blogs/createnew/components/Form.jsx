@@ -11,7 +11,7 @@ const Form = () => {
 	const formik = useFormik({
 		initialValues: {
 			title: "",
-			markdown: "# Hello",
+			markdown: "",
 		},
 		validateOnBlur: false,
 		validateOnChange: false,
