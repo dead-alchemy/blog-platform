@@ -2,6 +2,7 @@ import { signinSchema } from "@/lib/schemas";
 import { querySingle } from "@/lib/pg";
 import { NextResponse } from "next/server";
 import { makeToken } from "@/lib/functions/jwt";
+import { cookies } from "next/headers";
 
 // signing in a single user.
 export async function POST(req) {
@@ -10,7 +11,7 @@ export async function POST(req) {
 
 	// validate the data from the sign up with the same schema
 	// from the front end.
-	const validation = await signinSchema
+	await signinSchema
 		.validate(body)
 		.then(() => {
 			return null;
@@ -18,18 +19,13 @@ export async function POST(req) {
 		.catch((err) => {
 			console.log(err);
 
-			return err;
+			return NextResponse.json(
+				{ error: JSON.stringify(err.message) },
+				{
+					status: 400,
+				}
+			);
 		});
-
-	// if validation failed, send back the error.
-	if (validation !== null) {
-		return NextResponse.json(
-			{ error: JSON.stringify(err) },
-			{
-				status: 400,
-			}
-		);
-	}
 
 	const values = [body.email, body.password, undefined, undefined];
 	const result = await querySingle(
@@ -39,6 +35,13 @@ export async function POST(req) {
 	const jwt = makeToken({
 		user_id: result.p_user_id,
 		authentication_id: result.p_authentication_id,
+	});
+
+	cookies().set({
+		name: "token",
+		value: JSON.stringify(jwt),
+		httpOnly: true,
+		path: "/",
 	});
 
 	return NextResponse.json(jwt);

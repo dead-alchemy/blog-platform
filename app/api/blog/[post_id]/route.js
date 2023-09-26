@@ -2,10 +2,24 @@ import { querySingle } from "@/lib/pg";
 import { checkAuth } from "@/lib/functions";
 import { NextResponse } from "next/server";
 import { readToken } from "@/lib/functions/jwt";
+import { cookies } from "next/headers";
 
-// signing up a single user.
+// getting a single post.
 export async function GET(req, { params }) {
 	// get the body of our request.
+	const token = cookies().get("token");
+
+	const { authenticated } = await checkAuth(readToken(token.value));
+
+	if (!authenticated) {
+		return NextResponse.json(
+			{ error: "Not Authorized" },
+			{
+				status: 401,
+			}
+		);
+	}
+
 	const { post_id } = params;
 	const result = await querySingle(
 		`
@@ -26,6 +40,5 @@ export async function GET(req, { params }) {
 		[post_id]
 	);
 
-	//console.log(result.post_title);
 	return NextResponse.json(result);
 }

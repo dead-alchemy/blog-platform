@@ -1,4 +1,5 @@
 import SignInForm from "./components/form";
+import { cookies } from "next/headers";
 
 const SignIn = () => {
 	return (
