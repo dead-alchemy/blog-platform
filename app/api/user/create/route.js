@@ -3,6 +3,7 @@ import { querySingle } from "@/lib/pg";
 import { validateURL } from "@/lib/functions";
 import { NextResponse } from "next/server";
 import { makeToken } from "@/lib/functions/jwt";
+import { cookies } from "next/headers";
 
 // signing up a single user.
 export async function POST(req) {
@@ -91,6 +92,13 @@ export async function POST(req) {
 	const jwt = makeToken({
 		user_id: values[5],
 		authentication_id: values[6],
+	});
+
+	cookies().set({
+		name: "token",
+		value: JSON.stringify(jwt),
+		httpOnly: true,
+		path: "/",
 	});
 
 	return NextResponse.json(jwt);

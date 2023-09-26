@@ -1,4 +1,6 @@
 import { cookies } from "next/headers";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 async function getData(post_id) {
 	const getCookie = async (name) => {
@@ -22,28 +24,13 @@ async function getData(post_id) {
 const Post = async ({ params }) => {
 	const data = await getData(params.post_id);
 
-	const cookieStore = cookies();
-
-	const newcookies = cookieStore.getAll().map((cookie) => (
-		<div key={cookie.name}>
-			<p>Name: {cookie.name}</p>
-			<p>Value: {cookie.value}</p>
-		</div>
-	));
-
 	return (
 		<main>
-			{JSON.stringify(
-				cookies,
-				{
-					post_id: params.post_id,
-					...data,
-				},
-				null,
-				2
-			)}
-
-			{newcookies}
+			<h1>{data.post_title}</h1>
+			<ReactMarkdown
+				children={data.post_content}
+				remarkPlugins={[remarkGfm]}
+			/>
 		</main>
 	);
 };
