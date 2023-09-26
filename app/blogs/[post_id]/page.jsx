@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 
 async function getData(post_id) {
 	const getCookie = async (name) => {
@@ -24,7 +23,6 @@ async function getData(post_id) {
 const Post = async ({ params }) => {
 	const data = await getData(params.post_id);
 
-	console.log(data.post_content);
 	return (
 		<main>
 			<h1>{data.post_title}</h1>
