@@ -11,8 +11,6 @@ export async function GET(req, { params }) {
 
 	const { authenticated } = await checkAuth(readToken(token.value));
 
-	console.log(authenticated);
-
 	if (!authenticated) {
 		return NextResponse.body(
 			{ error: "Not Authorized" },

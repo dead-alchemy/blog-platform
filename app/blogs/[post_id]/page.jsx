@@ -24,13 +24,11 @@ async function getData(post_id) {
 const Post = async ({ params }) => {
 	const data = await getData(params.post_id);
 
+	console.log(data.post_content);
 	return (
 		<main>
 			<h1>{data.post_title}</h1>
-			<ReactMarkdown
-				children={data.post_content}
-				remarkPlugins={[remarkGfm]}
-			/>
+			<ReactMarkdown children={data.post_content} />
 		</main>
 	);
 };
