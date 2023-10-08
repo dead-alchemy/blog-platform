@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 async function getData(post_id) {
 	const getCookie = async (name) => {
@@ -15,7 +16,12 @@ async function getData(post_id) {
 	// The return value is *not* serialized
 	// You can return Date, Map, Set, etc.
 
+	if (res.status !== 200) {
+		redirect("/signin");
+	}
+
 	let data = await res.json();
+
 	return data;
 }
 

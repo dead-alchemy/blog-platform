@@ -1,38 +1,27 @@
 import { querySingle } from "@/lib/pg";
-import { checkAuth, validateURL } from "@/lib/functions";
+import { checkAuth } from "@/lib/functions";
 import { NextResponse } from "next/server";
 import { readToken } from "@/lib/functions/jwt";
 import { newBlogSchema } from "@/lib/schemas";
+import { cookies } from "next/headers";
 
 // signing up a single user.
 export async function POST(req) {
 	// get the body of our request.
 	const body = await req.json();
 
-	const return_not_authorized = (bool) => {
-		// if the requestor is not from a valid url return not authorized.
-		if (bool) {
-			return NextResponse.json(
-				{ error: "Not Authorized" },
-				{
-					status: 401,
-				}
-			);
-		}
-	};
-
 	// if the requestor is not from a valid url return not authorized.
 
-	return_not_authorized(!req.cookies.get("token")?.value);
-
 	// getting our current user id and auth_id from our token.
-	const token = readToken(req.cookies.get("token")?.value);
+	const token = cookies().get("token");
 
 	// now check if the current auth token is the most recently issued one.
 
-	const { authenticated } = await checkAuth(token);
+	const { authenticated } = await checkAuth(readToken(token.value));
 
-	return_not_authorized(!authenticated);
+	if (!authenticated) {
+		return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
+	}
 
 	const validated = await newBlogSchema
 		.validate(body)

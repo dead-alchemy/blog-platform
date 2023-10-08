@@ -12,12 +12,7 @@ export async function GET(req, { params }) {
 	const { authenticated } = await checkAuth(readToken(token.value));
 
 	if (!authenticated) {
-		return NextResponse.body(
-			{ error: "Not Authorized" },
-			{
-				status: 401,
-			}
-		);
+		return NextResponse.json({ error: "Not Authorized" }, { status: 401 });
 	}
 
 	const result = await query(
@@ -36,9 +31,6 @@ export async function GET(req, { params }) {
 
 		order by  p.created_dttm desc
 		limit 25
-
-
-
 	`
 	);
 
