@@ -35,8 +35,13 @@ const Blogs = async () => {
 			<div>
 				{rows.map((row) => (
 					<div key={row.post_id}>
-						<span>{row.post_title}</span>
+						<span>
+							<a href={`/blogs/${row.post_id}`}>
+								{row.post_title}{" "}
+							</a>
+						</span>
 						<span>{row.first_name + " " + row.last_name}</span>
+						<span></span>
 					</div>
 				))}
 			</div>

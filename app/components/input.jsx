@@ -7,13 +7,14 @@ const Input = ({
 	type = "text",
 	error,
 	rest,
+	id = "",
 }) => {
 	return (
 		<div>
 			<label htmlFor={name}>{label}</label>
 			<input
 				type={type}
-				id={name}
+				id={id ? id : name}
 				name={name}
 				onChange={handleChange}
 				value={value}
