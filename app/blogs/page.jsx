@@ -1,31 +1,31 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-async function getData(post_id) {
-	const getCookie = async (name) => {
-		return cookies().get(name)?.value ?? "";
-	};
+const Blogs = async () => {
+	async function getData() {
+		const getCookie = async (name) => {
+			return cookies().get(name)?.value ?? "";
+		};
 
-	const cookie = await getCookie("token");
+		const cookie = await getCookie("token");
 
-	const res = await fetch(`http://127.0.0.1:3000/api/blog/`, {
-		headers: {
-			Cookie: `token=${cookie};`,
-		},
-	});
-	// The return value is *not* serialized
-	// You can return Date, Map, Set, etc.
+		const res = await fetch(`http://127.0.0.1:3000/api/blog/`, {
+			headers: {
+				Cookie: `token=${cookie};`,
+			},
+		});
+		// The return value is *not* serialized
+		// You can return Date, Map, Set, etc.
 
-	if (res.status !== 200) {
-		redirect("/signin");
+		if (res.status !== 200) {
+			redirect("/signin");
+		}
+
+		let data = await res.json();
+
+		return data;
 	}
 
-	let data = await res.json();
-
-	return data;
-}
-
-const Blogs = async () => {
 	const { rows } = await getData();
 
 	return (

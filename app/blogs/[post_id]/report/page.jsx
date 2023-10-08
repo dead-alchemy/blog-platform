@@ -27,12 +27,12 @@ const Report = async ({ params }) => {
 	const { rows } = await getData();
 
 	return (
-		<div>
+		<main>
 			<h2>Report</h2>
 			<p>Why would you like to report this content?</p>
 
 			<Form report_reasons={rows} post_id={params.post_id} />
-		</div>
+		</main>
 	);
 };
 

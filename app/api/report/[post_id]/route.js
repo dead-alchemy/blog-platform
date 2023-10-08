@@ -9,8 +9,6 @@ export async function POST(req, { params }) {
 	// get the body of our request.
 	const body = await req.json();
 
-	// if the requestor is not from a valid url return not authorized.
-
 	// getting our current user id and auth_id from our token.
 	const token = cookies().get("token");
 
