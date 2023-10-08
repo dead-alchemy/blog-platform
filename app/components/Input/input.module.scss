@@ -1,0 +1,23 @@
+@import "../../colors.scss";
+
+.input {
+	line-height: 1.5rem;
+	margin-bottom: 0.5rem;
+}
+
+.radio {
+	line-height: 1.5rem;
+	margin-bottom: 0.5rem;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	align-items: center;
+	//width: fit-content;
+
+	input {
+		height: 1rem;
+	}
+}
+
+.error {
+	color: $secondary;
+}

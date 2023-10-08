@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import Form from "./components/Form";
+import styles from "./page.module.scss";
 
 const Report = async ({ params }) => {
 	const getData = async () => {
@@ -28,10 +29,12 @@ const Report = async ({ params }) => {
 
 	return (
 		<main>
-			<h2>Report</h2>
-			<p>Why would you like to report this content?</p>
+			<div className={styles.main}>
+				<h2>Report</h2>
+				<p>Why would you like to report this content?</p>
 
-			<Form report_reasons={rows} post_id={params.post_id} />
+				<Form report_reasons={rows} post_id={params.post_id} />
+			</div>
 		</main>
 	);
 };

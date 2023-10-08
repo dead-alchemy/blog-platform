@@ -1,4 +1,6 @@
 "use client";
+
+import styles from "./input.module.scss";
 const Input = ({
 	name,
 	handleChange,
@@ -10,7 +12,7 @@ const Input = ({
 	id = "",
 }) => {
 	return (
-		<div>
+		<div className={type === "radio" ? styles.radio : styles.input}>
 			<label htmlFor={name}>{label}</label>
 			<input
 				type={type}
@@ -20,7 +22,7 @@ const Input = ({
 				value={value}
 				{...rest}
 			/>
-			{error?.length > 0 && <div>{error}</div>}
+			{error?.length > 0 && <div className={styles.error}>{error}</div>}
 		</div>
 	);
 };

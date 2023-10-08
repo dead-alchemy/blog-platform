@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import style from "./page.module.scss";
+
 const Blogs = async () => {
 	async function getData() {
 		const getCookie = async (name) => {
@@ -29,19 +31,18 @@ const Blogs = async () => {
 	const { rows } = await getData();
 
 	return (
-		<main>
+		<main className={style.main}>
 			<h2>Blogs</h2>
 
-			<div>
+			<div className={style.row_container}>
 				{rows.map((row) => (
-					<div key={row.post_id}>
-						<span>
+					<div key={row.post_id} className={style.row}>
+						<div>
 							<a href={`/blogs/${row.post_id}`}>
 								{row.post_title}{" "}
 							</a>
-						</span>
-						<span>{row.first_name + " " + row.last_name}</span>
-						<span></span>
+						</div>
+						<div>{row.first_name + " " + row.last_name}</div>
 					</div>
 				))}
 			</div>

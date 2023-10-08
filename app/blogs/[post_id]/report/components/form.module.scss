@@ -1,0 +1,14 @@
+@import "../../../../colors.scss";
+
+.form {
+	width: max-content;
+}
+
+.submit {
+	background-color: $primary;
+	color: $background;
+	border-radius: 0.5rem;
+	border: solid 1px $text-color;
+	padding: 0.25rem 1.5rem;
+	float: right;
+}

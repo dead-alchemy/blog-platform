@@ -2,6 +2,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 
+import styles from "./page.module.scss";
+
 const Post = async ({ params }) => {
 	const getData = async () => {
 		const getCookie = async (name) => {
@@ -32,11 +34,13 @@ const Post = async ({ params }) => {
 
 	return (
 		<main>
-			<h1>{data.post_title}</h1>
-			<ReactMarkdown children={data.post_content} />
-			<form action={`/blogs/${params.post_id}/report`}>
-				<input type="submit" value="Report This Content" />
-			</form>
+			<div className={styles.content}>
+				<h2 className={styles.title}>{data.post_title}</h2>
+				<ReactMarkdown children={data.post_content} />
+				<form action={`/blogs/${params.post_id}/report`}>
+					<input type="submit" value="Report This Content" />
+				</form>
+			</div>
 		</main>
 	);
 };

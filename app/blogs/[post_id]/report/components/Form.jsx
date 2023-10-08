@@ -3,6 +3,8 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { Input } from "@/app/components";
 
+import styles from "./form.module.scss";
+
 const Form = ({ report_reasons, post_id }) => {
 	const [submitted, setSubmitted] = useState(false);
 
@@ -31,7 +33,7 @@ const Form = ({ report_reasons, post_id }) => {
 
 	if (!submitted) {
 		return (
-			<div>
+			<main className={styles.form}>
 				{report_reasons.map((report) => (
 					<Input
 						key={report.ref_report_reason_id}
@@ -44,14 +46,18 @@ const Form = ({ report_reasons, post_id }) => {
 					/>
 				))}
 
-				<button type="submit" onClick={formik.handleSubmit}>
+				<button
+					className={styles.submit}
+					type="submit"
+					onClick={formik.handleSubmit}
+				>
 					Submit
 				</button>
-			</div>
+			</main>
 		);
 	}
 
-	return <div>Thank you for reporting</div>;
+	return <main>Thank you for reporting</main>;
 };
 
 export default Form;
