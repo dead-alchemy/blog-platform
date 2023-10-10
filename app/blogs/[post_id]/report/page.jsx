@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import Form from "./components/Form";
 import styles from "./page.module.scss";
+import { redirect } from "next/navigation";
 
 const Report = async ({ params }) => {
 	const getData = async () => {
