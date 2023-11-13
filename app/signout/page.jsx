@@ -1,15 +1,25 @@
+"use client";
+import { useEffect } from "react";
+
+import { useRouter } from "next/navigation";
+
 const SignOut = async () => {
-	const signOut = async () =>
-		await fetch("http://localhost:3000/api/user/signout", {
-			method: "get",
-			credentials: "include",
-		});
+	const router = useRouter();
 
-	const res = await signOut();
+	useEffect(() => {
+		const signout = async () => {
+			await fetch("/api/user/signout", {
+				method: "GET",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}).then(router.replace("/"));
+		};
 
-	console.log(res);
+		signout();
+	}, []);
 
-	return <div>Signed Out!</div>;
+	return <></>;
 };
 
 export default SignOut;
