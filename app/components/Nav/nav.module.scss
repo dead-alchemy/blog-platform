@@ -1,0 +1,31 @@
+.main {
+	display: flex;
+	justify-content: space-between;
+}
+
+.hero {
+	font-weight: 700;
+}
+
+.links {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.link {
+	display: flex;
+
+	color: blue;
+
+	&:hover {
+		color: hotpink;
+	}
+}
+
+.active {
+	color: purple;
+
+	&:hover {
+		color: hotpink;
+	}
+}

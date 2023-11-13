@@ -1,22 +1,34 @@
 import { checkAuth } from "@/lib/functions";
 import { readToken } from "@/lib/functions/jwt";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+import styles from "./nav.module.scss";
+import Link from "next/link";
+import NavItem from "./components/NavItem";
+
 const Nav = async () => {
 	const token = cookies().get("token");
 
 	const { authenticated } = await checkAuth(readToken(token?.value));
 
-	if (authenticated) {
-		return (
-			<main>
-				<div>Hello user</div>
-			</main>
-		);
-	}
+	const authRoutes = [
+		{ name: "Blogs", pathname: "/blogs" },
+		{ name: "Profile", pathname: "/profile" },
+		{ name: "Sign Out", pathname: "/signout" },
+		,
+	];
+	const regRoutes = [
+		{ name: "Sign Up", pathname: "/signup" },
+		{ name: "Sign In", pathname: "/signin" },
+	];
 
 	return (
-		<main>
-			<div>Hello stranger</div>
+		<main className={styles.main}>
+			<div className={styles.hero}>Blog Platform</div>
+			<div className={styles.links}>
+				{authenticated
+					? authRoutes.map((route) => <NavItem {...route} />)
+					: regRoutes.map((route) => <NavItem {...route} />)}
+			</div>
 		</main>
 	);
 };
