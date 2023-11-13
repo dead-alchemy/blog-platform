@@ -28,21 +28,32 @@ export async function POST(req) {
 		});
 
 	const values = [body.email, body.password, undefined, undefined];
-	const result = await querySingle(
+	const jwt = await querySingle(
 		"CALL validate_and_insert_authentication($1, $2, $3, $4)",
 		values
-	);
-	const jwt = makeToken({
-		user_id: result.p_user_id,
-		authentication_id: result.p_authentication_id,
-	});
+	)
+		.then((result) => {
+			console.log(result);
+			const jwt = makeToken({
+				user_id: result.p_user_id,
+				authentication_id: result.p_authentication_id,
+			});
 
-	cookies().set({
-		name: "token",
-		value: JSON.stringify(jwt),
-		httpOnly: true,
-		path: "/",
-	});
+			cookies().set({
+				name: "token",
+				value: JSON.stringify(jwt),
+				httpOnly: true,
+				path: "/",
+			});
+
+			return jwt;
+		})
+		.catch((error) => {
+			return {
+				status: 402,
+				error: error.message,
+			};
+		});
 
 	return NextResponse.json(jwt);
 }

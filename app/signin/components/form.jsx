@@ -46,7 +46,13 @@ const SignInForm = () => {
 			})
 				.then(async (res) => {
 					const data = JSON.parse(await res.text());
-					if (res.status === 400) {
+
+					if (data.status === 400) {
+						formik.setErrors({ email: data.error });
+						return;
+					}
+
+					if (data.status === 402) {
 						formik.setErrors({ email: data.error });
 						return;
 					}
