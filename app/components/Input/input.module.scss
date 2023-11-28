@@ -3,6 +3,11 @@
 .input {
 	line-height: 1.5rem;
 	margin-bottom: 0.5rem;
+
+	input {
+		min-width: 20rem;
+		max-width: 100vw;
+	}
 }
 
 .radio {
@@ -20,4 +25,6 @@
 
 .error {
 	color: $secondary;
+	padding-bottom: 0;
+	margin-bottom: 0;
 }

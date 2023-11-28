@@ -14,6 +14,8 @@ const Input = ({
 	return (
 		<div className={type === "radio" ? styles.radio : styles.input}>
 			<label htmlFor={name}>{label}</label>
+			{error?.length > 0 && <div className={styles.error}>{error}</div>}
+
 			<input
 				type={type}
 				id={id ? id : name}
@@ -22,7 +24,6 @@ const Input = ({
 				value={value}
 				{...rest}
 			/>
-			{error?.length > 0 && <div className={styles.error}>{error}</div>}
 		</div>
 	);
 };
