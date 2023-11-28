@@ -2,31 +2,26 @@ import { cookies } from "next/headers";
 import Form from "./components/Form";
 import styles from "./page.module.scss";
 import { redirect } from "next/navigation";
-
+import { query } from "@/lib/pg";
+import { checkAuth } from "@/lib/functions";
+import { readToken } from "@/lib/functions/jwt";
 const Report = async ({ params }) => {
-	const getData = async () => {
-		const getCookie = async (name) => {
-			return cookies().get(name)?.value ?? "";
-		};
+	const token = cookies().get("token");
 
-		const cookie = await getCookie("token");
+	const { authenticated } = await checkAuth(readToken(token?.value));
 
-		const res = await fetch(`http://127.0.0.1:3000/api/report/reasons/`, {
-			headers: {
-				Cookie: `token=${cookie};`,
-			},
-		});
+	if (!authenticated) {
+		redirect("/signin");
+	}
 
-		if (res.status !== 200) {
-			redirect("/signin");
-		}
-
-		let data = await res.json();
-
-		return data;
-	};
-
-	const { rows } = await getData();
+	const { rows } = await query(
+		`
+		select 	ref_report_reason_id
+			,	report_reason
+			,	report_reason_desc
+		from ref_report_reasons
+		`
+	);
 
 	return (
 		<main>

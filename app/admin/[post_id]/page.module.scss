@@ -1,0 +1,30 @@
+.content {
+	overflow-y: auto;
+	margin-left: auto;
+	margin-right: auto;
+	line-height: 1.5rem;
+	padding: 1rem 2rem;
+	max-width: 70rem;
+}
+
+.title {
+	border: solid;
+	padding-left: 0.5rem;
+	border-width: 2px;
+	border-radius: 0.5rem;
+	line-height: 2.5rem;
+}
+
+.actions {
+	display: flex;
+	justify-content: end;
+	column-gap: 2rem;
+}
+
+.delete {
+	background-color: palevioletred;
+}
+
+.ok {
+	background-color: greenyellow;
+}
