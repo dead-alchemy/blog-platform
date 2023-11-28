@@ -1,41 +1,71 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import ReactMarkdown from "react-markdown";
+import { querySingle } from "@/lib/pg";
+import { checkAuth } from "@/lib/functions";
+import { readToken } from "@/lib/functions/jwt";
 
 import styles from "./page.module.scss";
 
 const Post = async ({ params }) => {
-	const getData = async () => {
-		const getCookie = async (name) => {
-			return cookies().get(name)?.value ?? "";
-		};
+	const token = cookies().get("token");
 
-		const cookie = await getCookie("token");
+	const { authenticated } = await checkAuth(readToken(token?.value));
 
-		const res = await fetch(
-			`http://127.0.0.1:3000/api/blog/${params.post_id}`,
-			{
-				headers: {
-					Cookie: `token=${cookie};`,
-				},
-			}
-		);
+	if (!authenticated) {
+		redirect("/signin");
+	}
 
-		if (res.status !== 200) {
-			redirect("/signin");
-		}
+	const { post_id } = params;
 
-		let data = await res.json();
+	const data = await querySingle(
+		`
+		select	post_title
+			,	post_content
+			,	p.created_dttm
+			,	u.last_name
+			,	u.first_name
+			,	u.user_id
+		from posts p
+		
+		join users u
+			on p.user_id = u.user_id
 
-		return data;
-	};
+		where is_deleted = false
+		and post_id = $1
 
-	const data = await getData();
+	`,
+		[post_id]
+	);
 
 	return (
 		<main>
 			<div className={styles.content}>
-				<h2 className={styles.title}>{data.post_title}</h2>
+				<div className={styles.title}>
+					<h2>{data.post_title}</h2>
+					<h3
+						style={{
+							textAlign: "right",
+							marginRight: ".5rem",
+							paddingBottom: 0,
+						}}
+					>
+						By{" "}
+						<a href={"/profile/" + data.user_id}>
+							{`${data.first_name} ${data.last_name}`}
+						</a>
+					</h3>
+					<h4
+						style={{
+							textAlign: "right",
+							marginRight: ".5rem",
+							paddingBottom: 0,
+						}}
+					>
+						Published on {data.created_dttm.toLocaleDateString()}
+					</h4>
+				</div>
+
 				<ReactMarkdown children={data.post_content} />
 				<form action={`/blogs/${params.post_id}/report`}>
 					<input type="submit" value="Report This Content" />

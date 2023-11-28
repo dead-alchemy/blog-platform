@@ -33,7 +33,6 @@ export async function POST(req) {
 		values
 	)
 		.then((result) => {
-			console.log(result);
 			const jwt = makeToken({
 				user_id: result.p_user_id,
 				authentication_id: result.p_authentication_id,

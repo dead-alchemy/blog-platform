@@ -13,11 +13,13 @@ import { CodeToggle } from "@mdxeditor/editor/plugins/toolbar/components/CodeTog
 import { InsertCodeBlock } from "@mdxeditor/editor/plugins/toolbar/components/InsertCodeBlock";
 import { BlockTypeSelect } from "@mdxeditor/editor/plugins/toolbar/components/BlockTypeSelect";
 import { toolbarPlugin } from "@mdxeditor/editor/plugins/toolbar";
+import "./editor.css";
 
 const Editor = ({ editorRef, markdown, handleChange }) => {
 	return (
 		<MDXEditor
 			ref={editorRef}
+			className="editor"
 			markdown={markdown}
 			onChange={handleChange}
 			plugins={[

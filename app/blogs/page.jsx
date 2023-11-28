@@ -1,34 +1,38 @@
+import { checkAuth } from "@/lib/functions";
+import { readToken } from "@/lib/functions/jwt";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { query } from "@/lib/pg";
 
 import style from "./page.module.scss";
 
 const Blogs = async () => {
-	async function getData() {
-		const getCookie = async (name) => {
-			return cookies().get(name)?.value ?? "";
-		};
+	const token = cookies().get("token");
 
-		const cookie = await getCookie("token");
+	const { authenticated } = await checkAuth(readToken(token?.value));
 
-		const res = await fetch(`http://127.0.0.1:3000/api/blog/`, {
-			headers: {
-				Cookie: `token=${cookie};`,
-			},
-		});
-		// The return value is *not* serialized
-		// You can return Date, Map, Set, etc.
-
-		if (res.status !== 200) {
-			redirect("/signin");
-		}
-
-		let data = await res.json();
-
-		return data;
+	if (!authenticated) {
+		redirect("/signin");
 	}
 
-	const { rows } = await getData();
+	const { rows } = await query(
+		`
+		select 	post_id
+			,	post_title
+			,	u.first_name
+			, 	u.last_name
+			,	p.created_dttm
+		from posts p
+
+		join users u
+			on p.user_id = u.user_id
+			
+		where is_deleted = false
+
+		order by  p.created_dttm desc
+		limit 25
+	`
+	);
 
 	return (
 		<main className={style.main}>

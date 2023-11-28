@@ -13,6 +13,7 @@ const Nav = async () => {
 	const authRoutes = [
 		{ name: "Blogs", pathname: "/blogs" },
 		{ name: "Profile", pathname: "/profile" },
+		{ name: "New Blog", pathname: "/blogs/createnew" },
 		{ name: "Sign Out", pathname: "/signout" },
 		,
 	];
@@ -26,8 +27,12 @@ const Nav = async () => {
 			<div className={styles.hero}>Blog Platform</div>
 			<div className={styles.links}>
 				{authenticated
-					? authRoutes.map((route) => <NavItem {...route} />)
-					: regRoutes.map((route) => <NavItem {...route} />)}
+					? authRoutes.map((route) => (
+							<NavItem key={route.pathname} {...route} />
+					  ))
+					: regRoutes.map((route) => (
+							<NavItem key={route.pathname} {...route} />
+					  ))}
 			</div>
 		</main>
 	);

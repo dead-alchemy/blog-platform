@@ -13,8 +13,12 @@ const Input = ({
 }) => {
 	return (
 		<div className={type === "radio" ? styles.radio : styles.input}>
-			<label htmlFor={name}>{label}</label>
-			{error?.length > 0 && <div className={styles.error}>{error}</div>}
+			<div>
+				<label htmlFor={name}>{label}</label>
+				{error?.length > 0 && (
+					<div className={styles.error}>{error}</div>
+				)}
+			</div>
 
 			<input
 				type={type}
