@@ -7,6 +7,7 @@ import { readToken } from "@/lib/functions/jwt";
 
 import styles from "./page.module.scss";
 import { getBlog } from "@/lib/models.js/getBlog";
+import ActionButton from "./components/ActionButton";
 
 const Post = async ({ params }) => {
 	const token = cookies().get("token");
@@ -36,6 +37,16 @@ const Post = async ({ params }) => {
 		[post_id]
 	);
 
+	const actionButtons = [
+		{
+			action: "delete",
+			label: "Delete This Content",
+		},
+		{
+			action: "ok",
+			label: "Content Ok",
+		},
+	];
 	return (
 		<main>
 			<div className={styles.content}>
@@ -85,24 +96,13 @@ const Post = async ({ params }) => {
 				<ReactMarkdown children={blog.post_content} />
 
 				<div className={styles.actions}>
-					<div>
-						<form action={`/admin/${params.post_id}/delete`}>
-							<input
-								className={styles.delete}
-								type="submit"
-								value="Delete This Content"
-							/>
-						</form>
-					</div>
-					<div>
-						<form action={`/admin/${params.post_id}/ok`}>
-							<input
-								className={styles.ok}
-								type="submit"
-								value="Content Ok"
-							/>
-						</form>
-					</div>
+					{actionButtons.map((button) => (
+						<ActionButton
+							key={button.action}
+							post_id={post_id}
+							{...button}
+						/>
+					))}
 				</div>
 			</div>
 		</main>

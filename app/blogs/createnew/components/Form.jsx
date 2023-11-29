@@ -26,7 +26,6 @@ const Form = () => {
 				body: JSON.stringify(values),
 			}).then(async (res) => {
 				const data = JSON.parse(await res.text());
-				console.log(data);
 				window.location.replace(`/blogs/${data}`);
 			});
 			// .catch((error) => {

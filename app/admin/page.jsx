@@ -47,34 +47,40 @@ const Profile = async () => {
 
 	return (
 		<main className={styles.container}>
-			<h3>Admin / Reported Blog</h3>
+			<h3>Admin / Reported Blogs</h3>
 			<div className={styles.row_container}>
-				<table>
-					<thead>
-						<tr>
-							<th style={{ textAlign: "left" }}>Blog Name</th>
-							<th style={{ paddingRight: "1rem" }}>
-								Times Reported
-							</th>
-							<th style={{ paddingRight: "1rem" }}>
-								First Report
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{rows.map((row) => (
-							<tr key={row.post_id}>
-								<td>
-									<a href={`/admin/${row.post_id}`}>
-										{row.post_title}
-									</a>
-								</td>
-								<td>{row.reports}</td>
-								<td>{row.first_report.toLocaleDateString()}</td>
+				{rows.length ? (
+					<table>
+						<thead>
+							<tr>
+								<th style={{ textAlign: "left" }}>Blog Name</th>
+								<th style={{ paddingRight: "1rem" }}>
+									Times Reported
+								</th>
+								<th style={{ paddingRight: "1rem" }}>
+									First Report
+								</th>
 							</tr>
-						))}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{rows.map((row) => (
+								<tr key={row.post_id}>
+									<td>
+										<a href={`/admin/${row.post_id}`}>
+											{row.post_title}
+										</a>
+									</td>
+									<td>{row.reports}</td>
+									<td>
+										{row.first_report.toLocaleDateString()}
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				) : (
+					<div>Nothing Reported!</div>
+				)}
 			</div>
 		</main>
 	);
