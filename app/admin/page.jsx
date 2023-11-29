@@ -18,7 +18,7 @@ const Profile = async () => {
 	}
 
 	if (!admin_id) {
-		redirect("/");
+		redirect("/404");
 	}
 
 	const { rows } = await query(`

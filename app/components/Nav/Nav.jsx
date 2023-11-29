@@ -16,10 +16,15 @@ const Nav = async () => {
 	const buildRoutes = () => {
 		if (admin_id !== undefined) {
 			return [...adminRoutes, ...authRoutes];
+		}
+		if (authenticated) {
+			return [...authRoutes];
 		} else {
 			return [...regRoutes];
 		}
 	};
+
+	console.log(buildRoutes());
 
 	return (
 		<main className={styles.main}>
