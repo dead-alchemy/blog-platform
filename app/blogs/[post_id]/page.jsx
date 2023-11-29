@@ -6,6 +6,7 @@ import { checkAuth } from "@/lib/functions";
 import { readToken } from "@/lib/functions/jwt";
 
 import styles from "./page.module.scss";
+import { getBlog } from "@/lib/models.js/getBlog";
 
 const Post = async ({ params }) => {
 	const token = cookies().get("token");
@@ -18,31 +19,13 @@ const Post = async ({ params }) => {
 
 	const { post_id } = params;
 
-	const data = await querySingle(
-		`
-		select	post_title
-			,	post_content
-			,	p.created_dttm
-			,	u.last_name
-			,	u.first_name
-			,	u.user_id
-		from posts p
-		
-		join users u
-			on p.user_id = u.user_id
-
-		where is_deleted = false
-		and post_id = $1
-
-	`,
-		[post_id]
-	);
+	const blog = await getBlog(post_id);
 
 	return (
 		<main>
 			<div className={styles.content}>
 				<div className={styles.title}>
-					<h2>{data.post_title}</h2>
+					<h2>{blog.post_title}</h2>
 					<h3
 						style={{
 							textAlign: "right",
@@ -51,8 +34,8 @@ const Post = async ({ params }) => {
 						}}
 					>
 						By{" "}
-						<a href={"/profile/" + data.user_id}>
-							{`${data.first_name} ${data.last_name}`}
+						<a href={"/profile/" + blog.user_id}>
+							{`${blog.first_name} ${blog.last_name}`}
 						</a>
 					</h3>
 					<h4
@@ -62,11 +45,11 @@ const Post = async ({ params }) => {
 							paddingBottom: 0,
 						}}
 					>
-						Published on {data.created_dttm.toLocaleDateString()}
+						Published on {blog.created_dttm.toLocaleDateString()}
 					</h4>
 				</div>
 
-				<ReactMarkdown children={data.post_content} />
+				<ReactMarkdown children={blog.post_content} />
 				<form action={`/blogs/${params.post_id}/report`}>
 					<input type="submit" value="Report This Content" />
 				</form>
