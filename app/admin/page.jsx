@@ -13,8 +13,6 @@ const Profile = async () => {
 		readToken(token?.value)
 	);
 
-	const { user_id } = readToken(token?.value);
-
 	if (!authenticated) {
 		redirect("/signin");
 	}

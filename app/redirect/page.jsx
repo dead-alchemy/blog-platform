@@ -3,7 +3,6 @@
 import { redirect } from "next/navigation";
 
 const Redirect = ({ searchParams }) => {
-	console.log(searchParams);
 	if (searchParams?.url) {
 		setTimeout(() => {}, 100);
 
