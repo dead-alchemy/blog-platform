@@ -1,33 +1,32 @@
 import { checkAuth } from "@/lib/functions";
 import { readToken } from "@/lib/functions/jwt";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import styles from "./nav.module.scss";
-import Link from "next/link";
 import NavItem from "./components/NavItem";
+
+import { adminRoutes, authRoutes, regRoutes } from "@/lib/consts";
 
 const Nav = async () => {
 	const token = cookies().get("token");
 
-	const { authenticated } = await checkAuth(readToken(token?.value));
+	const { authenticated, admin_id } = await checkAuth(
+		readToken(token?.value)
+	);
 
-	const authRoutes = [
-		{ name: "Blogs", pathname: "/blogs" },
-		{ name: "Profile", pathname: "/profile" },
-		{ name: "New Blog", pathname: "/blogs/createnew" },
-		{ name: "Sign Out", pathname: "/signout" },
-		,
-	];
-	const regRoutes = [
-		{ name: "Sign Up", pathname: "/signup" },
-		{ name: "Sign In", pathname: "/signin" },
-	];
+	const buildRoutes = () => {
+		if (admin_id !== undefined) {
+			return [...adminRoutes, ...authRoutes];
+		} else {
+			return [...regRoutes];
+		}
+	};
 
 	return (
 		<main className={styles.main}>
 			<div className={styles.hero}>Blog Platform</div>
 			<div className={styles.links}>
 				{authenticated
-					? authRoutes.map((route) => (
+					? buildRoutes().map((route) => (
 							<NavItem key={route.pathname} {...route} />
 					  ))
 					: regRoutes.map((route) => (
