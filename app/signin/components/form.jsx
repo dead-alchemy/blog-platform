@@ -58,7 +58,7 @@ const SignInForm = () => {
 						formik.setErrors({ email: data.error });
 						return;
 					}
-					router.push("/blogs");
+					window.location.replace("/blogs");
 				})
 				.catch((error) => {
 					console.log(error);

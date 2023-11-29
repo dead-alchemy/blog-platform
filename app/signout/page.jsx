@@ -13,7 +13,7 @@ const SignOut = async () => {
 				headers: {
 					"Content-Type": "application/json",
 				},
-			}).then(router.replace("/"));
+			}).then(window.location.replace("/"));
 		};
 
 		signout();
