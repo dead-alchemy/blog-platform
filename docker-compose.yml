@@ -1,6 +1,24 @@
 version: "3.9"
 services:
+    client:
+        container_name: blogplatform-client
+        build: ./client
+        environment:
+            PG_USER: ${PG_USER}
+            PG_PASSWORD: ${PG_PASSWORD}
+            PG_DATABASE: ${PG_DATABASE}
+            PW_SECRET: ${PW_SECRET}
+            JW_SECRET: ${JW_SECRET}
+        ports:
+            - 3000:3000
+        volumes:
+            - ./client:/client
+            - /client/node_modules
+            - /client/.next
+        depends_on:
+            - db
     db:
+        container_name: blogplatform-db
         image: postgres:latest
         environment:
             POSTGRES_USER: ${PG_USER}
@@ -12,13 +30,5 @@ services:
         volumes:
             - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
             - ./db/data:/var/lib/postgresql/data
-    app:
-        image: node:18-alpine
-        environment:
-            PG_USER: ${PG_USER}
-            PG_PASSWORD: ${PG_PASSWORD}
-            PG_DATABASE: ${PG_DATABASE}
-            PW_SECRET: ${PW_SECRET}
-            JW_SECRET: ${JW_SECRET}
-        depends_on:
-            - db
+        expose:
+            - 5432

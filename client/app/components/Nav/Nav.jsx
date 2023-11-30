@@ -24,8 +24,6 @@ const Nav = async () => {
 		}
 	};
 
-	console.log(buildRoutes());
-
 	return (
 		<main className={styles.main}>
 			<div className={styles.hero}>Blog Platform</div>
