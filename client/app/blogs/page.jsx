@@ -30,7 +30,7 @@ const Blogs = async () => {
 		where is_deleted = false
 
 		order by  p.created_dttm desc
-		limit 25
+		limit 50
 	`
 	);
 
