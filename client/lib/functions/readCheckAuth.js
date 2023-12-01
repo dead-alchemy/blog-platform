@@ -20,7 +20,7 @@ import { readToken } from "./jwt";
  */
 
 export const readCheckAuth = async (token_value) => {
-	const result = await checkAuth(readToken(token?.value));
+	const result = await checkAuth(readToken(token_value));
 
 	return result;
 };
