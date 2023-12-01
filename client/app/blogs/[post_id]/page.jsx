@@ -7,6 +7,7 @@ import { readToken } from "@/lib/functions/jwt";
 
 import styles from "./page.module.scss";
 import { getBlog } from "@/lib/models.js/getBlog";
+import ReachedBottom from "./components/read";
 
 const Post = async ({ params }) => {
 	const token = cookies().get("token");
@@ -20,6 +21,16 @@ const Post = async ({ params }) => {
 	const { post_id } = params;
 
 	const blog = await getBlog(post_id);
+
+	// increment blog counter by 1.
+	await querySingle(
+		`
+		update posts
+			set views = views + 1
+		where post_id = $1
+	`,
+		[post_id]
+	);
 
 	return (
 		<main>
@@ -50,6 +61,7 @@ const Post = async ({ params }) => {
 				</div>
 
 				<ReactMarkdown children={blog.post_content} />
+				<ReachedBottom post_id={params.post_id} />
 				<form action={`/blogs/${params.post_id}/report`}>
 					<input type="submit" value="Report This Content" />
 				</form>

@@ -185,7 +185,8 @@ CREATE TABLE public.posts (
     post_content text NOT NULL,
     created_dttm timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
     is_deleted boolean DEFAULT false NOT NULL,
-    views bigint DEFAULT 0 NOT NULL
+    views bigint DEFAULT 0 NOT NULL,
+    finished bigint DEFAULT 0 NOT NULL
 );
 
 
