@@ -1,6 +1,5 @@
-import { checkAuth } from "@/lib/functions";
-import { readToken } from "@/lib/functions/jwt";
-import { query, querySingle } from "@/lib/pg";
+import { query } from "@/lib/pg";
+import { readCheckAuth } from "@/lib/functions";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -9,9 +8,7 @@ import styles from "./page.module.scss";
 const Profile = async () => {
 	const token = cookies().get("token");
 
-	const { authenticated, admin_id } = await checkAuth(
-		readToken(token?.value)
-	);
+	const { authenticated, admin_id } = await readCheckAuth(token?.value);
 
 	if (!authenticated) {
 		redirect("/signin");

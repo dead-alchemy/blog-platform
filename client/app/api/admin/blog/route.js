@@ -1,8 +1,7 @@
-import { checkAuth } from "@/lib/functions";
 import { NextResponse } from "next/server";
-import { readToken } from "@/lib/functions/jwt";
 import { cookies } from "next/headers";
 import { querySingle } from "@/lib/pg";
+import { readCheckAuth } from "@/lib/functions";
 
 // signing up a single user.
 export async function POST(req) {
@@ -11,10 +10,7 @@ export async function POST(req) {
 
 	const token = cookies().get("token");
 
-	const { authenticated, admin_id } = await checkAuth(
-		readToken(token?.value)
-	);
-	const { user_id } = readToken(token?.value);
+	const { authenticated, admin_id } = await readCheckAuth(token?.value);
 
 	if (!authenticated || !admin_id) {
 		return NextResponse.json({ error: "Not Authorized" }, { status: 401 });

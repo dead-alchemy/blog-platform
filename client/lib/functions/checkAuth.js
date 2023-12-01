@@ -1,5 +1,29 @@
 import { querySingle } from "../pg";
 
+/**
+ * Checks the authentication status and, if applicable, identifies the user as an administrator.
+ *
+ * @async
+ * @function
+ * @param {Object} authData - The authentication data object.
+ * @param {number} authData.user_id - The unique identifier of the user.
+ * @param {number} authData.authentication_id - The unique identifier of the authentication session.
+ * @returns {Promise<Object>} - A promise that resolves to an object containing the authentication status and, if applicable, the administrator's ID.
+ *   - `authenticated`: A boolean indicating whether the user is authenticated.
+ *   - `admin_id`: The administrator's ID if the user is an administrator, or `undefined` if not an administrator.
+ * @throws {Error} - Throws an error if the authentication check fails.
+ *
+ * @example
+ * const authenticationResult = await checkAuth({
+ *   user_id: 123,
+ *   authentication_id: 456,
+ * });
+ * console.log(authenticationResult);
+ * // {
+ * //   authenticated: true,
+ * //   admin_id: uuid // or undefined if not an admin
+ * // }
+ */
 export const checkAuth = async ({ user_id, authentication_id }) => {
 	const values = [user_id, authentication_id, undefined];
 

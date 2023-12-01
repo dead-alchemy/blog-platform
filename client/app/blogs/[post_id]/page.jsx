@@ -2,8 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import { querySingle } from "@/lib/pg";
-import { checkAuth } from "@/lib/functions";
-import { readToken } from "@/lib/functions/jwt";
+import { readCheckAuth } from "@/lib/functions";
 
 import styles from "./page.module.scss";
 import { getBlog } from "@/lib/models.js/getBlog";
@@ -12,7 +11,7 @@ import ReachedBottom from "./components/read";
 const Post = async ({ params }) => {
 	const token = cookies().get("token");
 
-	const { authenticated } = await checkAuth(readToken(token?.value));
+	const { authenticated } = await readCheckAuth(token?.value);
 
 	if (!authenticated) {
 		redirect("/signin");

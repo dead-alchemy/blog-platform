@@ -1,7 +1,6 @@
 import { query } from "@/lib/pg";
-import { checkAuth } from "@/lib/functions";
+import { readCheckAuth } from "@/lib/functions";
 import { NextResponse } from "next/server";
-import { readToken } from "@/lib/functions/jwt";
 import { cookies } from "next/headers";
 
 // getting a single post.
@@ -9,7 +8,7 @@ export async function GET(req, { params }) {
 	// get the body of our request.
 	const token = cookies().get("token");
 
-	const { authenticated } = await checkAuth(readToken(token.value));
+	const { authenticated } = await readCheckAuth(token?.value);
 
 	if (!authenticated) {
 		return NextResponse.json({ error: "Not Authorized" }, { status: 401 });

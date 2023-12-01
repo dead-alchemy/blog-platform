@@ -3,13 +3,13 @@ import { querySingle } from "@/lib/pg";
 import { NextResponse } from "next/server";
 import { makeToken, readToken } from "@/lib/functions/jwt";
 import { cookies } from "next/headers";
-import { checkAuth } from "@/lib/functions";
+import { readCheckAuth } from "@/lib/functions";
 
 export async function POST(req) {
 	const body = await req.json();
 	const token = cookies().get("token");
 
-	const { authenticated } = await checkAuth(readToken(token?.value));
+	const { authenticated } = await readCheckAuth(token?.value);
 	const { user_id } = readToken(token?.value);
 
 	if (!authenticated) {

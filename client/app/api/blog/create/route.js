@@ -1,5 +1,5 @@
 import { querySingle } from "@/lib/pg";
-import { checkAuth } from "@/lib/functions";
+import { readCheckAuth } from "@/lib/functions";
 import { NextResponse } from "next/server";
 import { readToken } from "@/lib/functions/jwt";
 import { newBlogSchema } from "@/lib/schemas";
@@ -18,7 +18,7 @@ export async function POST(req) {
 
 	// now check if the current auth token is the most recently issued one.
 
-	const { authenticated } = await checkAuth(readToken(token?.value));
+	const { authenticated } = await readCheckAuth(token?.value);
 	const { user_id } = readToken(token?.value);
 
 	if (!authenticated) {

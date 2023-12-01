@@ -1,5 +1,4 @@
-import { checkAuth } from "@/lib/functions";
-import { readToken } from "@/lib/functions/jwt";
+import { readCheckAuth } from "@/lib/functions";
 import { cookies } from "next/headers";
 import styles from "./nav.module.scss";
 import NavItem from "./components/NavItem";
@@ -9,9 +8,7 @@ import { adminRoutes, authRoutes, regRoutes } from "@/lib/consts";
 const Nav = async () => {
 	const token = cookies().get("token");
 
-	const { authenticated, admin_id } = await checkAuth(
-		readToken(token?.value)
-	);
+	const { authenticated, admin_id } = await readCheckAuth(token?.value);
 
 	const buildRoutes = () => {
 		if (admin_id !== undefined) {
